@@ -3,8 +3,8 @@ import css from "./Sidebar.module.css";
 import { getCategories, type Tag } from "@/lib/api";
 import { Routes } from "@/config/routes";
 
-const SidebarNotes = () => {
-  const categories: Tag[] = [...getCategories];
+const SidebarNotes = async () => {
+  const categories = await getCategories();
 
   return (
     <ul className={css.menuList}>

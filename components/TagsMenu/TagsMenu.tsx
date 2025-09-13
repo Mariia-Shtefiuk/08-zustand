@@ -1,16 +1,16 @@
 "use client";
 
-import css from "./TagsMenu.module.css";
 import { Routes } from "@/config/routes";
-import { Tag } from "@/lib/api";
+import css from "./TagsMenu.module.css";
+import { Tags } from "@/lib/api";
 import Link from "next/link";
 import { useState } from "react";
 
 interface TagsMenuProps {
-  categories: Tag[];
+  categories: Tags;
 }
 
-export default function TagsMenu({ categories }: TagsMenuProps) {
+const TagsMenu = ({ categories }: TagsMenuProps) => {
   const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -40,4 +40,6 @@ export default function TagsMenu({ categories }: TagsMenuProps) {
       )}
     </div>
   );
-}
+};
+
+export default TagsMenu;

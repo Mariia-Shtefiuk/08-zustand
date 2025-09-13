@@ -9,42 +9,41 @@ axios.defaults.headers[
 const Tags = ["All", "Todo", "Work", "Personal", "Shopping"] as const;
 
 export type Tag = (typeof Tags)[number];
-export type FilterableTag = Exclude<Tag, "All">;
+export type Tags = Tag[];
 
-export const getCategories = Tags;
+export type SortBy = "created" | "updated";
 
-type SortBy = "created" | "updated";
-
-export interface PaginatedNotes {
+export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
 }
 
-export const fetchNotes = async (
+interface NewNoteData {
+  title: string;
+  content: string;
+  tag: string;
+}
+
+export async function fetchNotes(
   search: string,
-  page: number = 1,
-  perPage: number = 10,
-  tag?: FilterableTag,
+  page: number,
+  tag?: Tag,
   sortBy?: SortBy
-) => {
-  const params: { [key: string]: string | number } = {
-    page,
-    perPage,
-  };
+): Promise<FetchNotesResponse> {
+  const params = new URLSearchParams({
+    search,
+    page: String(page),
+    ...(tag ? { tag } : {}),
+    ...(sortBy ? { sortBy } : {}),
+  });
 
-  if (search) params.search = search;
-  if (tag) params.tag = tag;
-  if (sortBy) params.sortBy = sortBy;
+  const res = await fetch(`/api/notes?${params}`);
+  if (!res.ok) throw new Error("Failed to fetch notes");
+  return res.json() as Promise<FetchNotesResponse>;
+}
 
-  const { data } = await axios.get<PaginatedNotes>("notes", { params });
-  return data;
-};
-
-export const createNote = async (
-  title: string,
-  content: string,
-  tag: string
-) => {
+export const createNote = async (note: NewNoteData) => {
+  const { title, content, tag } = note;
   const { data } = await axios.post<Note>("notes", {
     title,
     content,
@@ -54,11 +53,15 @@ export const createNote = async (
 };
 
 export const fetchNoteById = async (id: string) => {
-  const { data } = await axios.get<Note>(`/notes/${id}`);
+  const { data } = await axios.get<Note>(`notes/${id}`);
   return data;
 };
 
 export const deleteNote = async (id: string) => {
-  const { data } = await axios.delete<Note>(`/notes/${id}`);
+  const { data } = await axios.delete<Note>(`notes/${id}`);
   return data;
+};
+
+export const getCategories = (): Tags => {
+  return [...Tags];
 };

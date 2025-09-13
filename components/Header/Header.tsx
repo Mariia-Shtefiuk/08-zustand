@@ -1,11 +1,12 @@
 import Link from "next/link";
 import css from "./Header.module.css";
+import { Routes } from "@/config/routes";
 import TagsMenu from "../TagsMenu/TagsMenu";
 import { getCategories } from "@/lib/api";
-import { Routes } from "@/config/routes";
 
-const Header = () => {
-  const categories = [...getCategories];
+const Header = async () => {
+  const categories = await getCategories();
+
   return (
     <header className={css.header}>
       <Link href={Routes.Home} aria-label="Home">

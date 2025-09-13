@@ -1,5 +1,36 @@
+import type { Metadata } from "next";
 import css from "./page.module.css";
 
+export const metadata: Metadata = {
+  title: "Welcome to NoteHub",
+  description:
+    "NoteHub is a simple and efficient application for managing personal notes. Keep your thoughts organized and accessible anywhere.",
+  openGraph: {
+    title: "Welcome to NoteHub",
+    description:
+      "Organize and access your notes with NoteHub — the modern note management app.",
+    url: "https://notehub.example.com",
+    siteName: "NoteHub",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "NoteHub Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Welcome to NoteHub",
+    description:
+      "Organize and access your notes with NoteHub — the modern note management app.",
+    images: ["/og-image.png"],
+    creator: "@notehub",
+  },
+};
 export default function Home() {
   return (
     <div className={css.container}>
