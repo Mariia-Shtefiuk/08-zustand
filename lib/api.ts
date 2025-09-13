@@ -37,7 +37,16 @@ export async function fetchNotes(
     ...(sortBy ? { sortBy } : {}),
   });
 
-  const res = await fetch(`/api/notes?${params}`);
+  const res = await fetch(
+    `https://notehub-public.goit.study/api/notes?${params}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+      },
+      cache: "no-store", // щоб не кешував
+    }
+  );
+
   if (!res.ok) throw new Error("Failed to fetch notes");
   return res.json() as Promise<FetchNotesResponse>;
 }
